@@ -30,7 +30,15 @@ public class Booking {
     private boolean confirm;
 
 
-    public Booking(LocalDate bookedDate, PaymentStatus paymentStatus, Movie bookedMovie, List<Place> places, Cinema cinema, Client client, Hall hall, boolean reserved, Service service) {
+    public Booking(LocalDate bookedDate,
+                   PaymentStatus paymentStatus,
+                   Movie bookedMovie,
+                   List<Place> places,
+                   Cinema cinema,
+                   Client client,
+                   Hall hall,
+                   boolean reserved,
+                   Service service) {
         this.bookedDate = bookedDate;
         this.paymentStatus = paymentStatus;
         this.bookedMovie = bookedMovie;

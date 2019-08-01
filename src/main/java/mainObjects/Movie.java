@@ -35,8 +35,4 @@ public class Movie {
                 price)
                 .toString();
     }
-
-    void printPriceExplanation() {
-        System.out.println(priceExplanation);
-    }
 }

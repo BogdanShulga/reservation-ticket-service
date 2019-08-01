@@ -20,7 +20,7 @@ public class Client {
 
     @Override
     public String toString() {
-        return  "name='" + name + '\'' +
+        return "name='" + name + '\'' +
                 ", surName='" + surName + '\'' +
                 ", age=" + age +
                 ", email='" + email + '\'' +

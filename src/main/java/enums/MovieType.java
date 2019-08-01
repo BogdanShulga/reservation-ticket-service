@@ -3,18 +3,8 @@ package enums;
 import java.util.Random;
 
 public enum MovieType {
-    ORIGINAL("original"),
-    TRANSLATED("translated");
-
-    String type;
-
-    MovieType(String type) {
-        this.type = type;
-    }
-
-    public String getType() {
-        return this.type;
-    }
+    ORIGINAL,
+    TRANSLATED;
 
     public static MovieType getRandValue() {
         MovieType[] values = values();

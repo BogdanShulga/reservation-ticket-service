@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @Setter
-public class Service implements Runnable{
+public class Service implements Runnable {
     private Scanner scanner;
     private int count;
     private List<Movie> multiplexMovieList;
@@ -145,7 +145,7 @@ public class Service implements Runnable{
         } else if (anInt == 4) {
             viewBookings();
             chooseAction();
-        } else if (anInt == 0){
+        } else if (anInt == 0) {
             askBookedDate();
         }
     }
@@ -280,7 +280,7 @@ public class Service implements Runnable{
             System.out.println("You have no bookings yet!");
         } else {
             int i = 0;
-            for (Booking b: bookings) {
+            for (Booking b : bookings) {
                 System.out.println("Booking #" + ++i);
                 System.out.println(b);
             }
@@ -300,7 +300,7 @@ public class Service implements Runnable{
         int[] needed = new int[count];
         for (int i = 0; i < count; i++) needed[i] = i;
         int anInt = getIntClientInput(needed);
-        movies = movieCategoryListMap.get(movieCategories.get(anInt-1));
+        movies = movieCategoryListMap.get(movieCategories.get(anInt - 1));
         printMovieList(movies);
         chooseMovie(movies);
     }

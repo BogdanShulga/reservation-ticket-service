@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
-import java.util.Formatter;
 import java.util.List;
 import java.util.Random;
 
@@ -44,7 +43,7 @@ public class Hall {
         for (int i = 1; i <= rows; i++) {
             for (int j = 1; j <= sitsInRow; j++) {
                 ++number;
-                char reserved = places.get(number-1).isReserved()? sits[1] : sits[0];
+                char reserved = places.get(number - 1).isReserved() ? sits[1] : sits[0];
                 System.out.printf("  %3d=%1c  ", number, reserved);
             }
             System.out.println();

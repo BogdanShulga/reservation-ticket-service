@@ -43,9 +43,7 @@ class ListGenerator {
     }
 
     private static void setMoviesPrices(List<Movie> movies, Client client, LocalDate date) {
-        movies.forEach(movie -> {
-            movie.setPrice(getPrice(movie, client, date));
-        });
+        movies.forEach(movie -> movie.setPrice(getPrice(movie, client, date)));
     }
 
     private static double getDiscount(Movie movie, Client client, LocalDate date) {
@@ -72,7 +70,7 @@ class ListGenerator {
             discount = AFTER_PREMIERE_DISCOUNT + STUDENT_DISCOUNT;
             movie.setPriceExplanation("discount: for student - " + STUDENT_DISCOUNT
                     + "%, after premier - " + AFTER_PREMIERE_DISCOUNT + "%, " +
-                    "total discount - " +discount + "%");
+                    "total discount - " + discount + "%");
         } else if (movie.getMovieStatus().equals(MovieStatus.AVAILABLE)
                 && !client.isStudent()
                 && !date.equals(LocalDate.now())) {

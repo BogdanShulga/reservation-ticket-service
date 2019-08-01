@@ -26,12 +26,18 @@ public class Cinema {
         initHalls(movies);
     }
 
-    private void initHalls(List<Movie> movies){
+    private void initHalls(List<Movie> movies) {
         getMoviesByPlaceType(movies).forEach((key, value) -> {
-            switch (key){
-                case VIP: vipHall = new Hall(3, 10, PlaceType.VIP, value); break;
-                case NORMAL: normalHall = new Hall(10, 15, PlaceType.NORMAL, value); break;
-                case PREMIUM: premiumHall = new Hall(5, 15, PlaceType.PREMIUM, value); break;
+            switch (key) {
+                case VIP:
+                    vipHall = new Hall(3, 10, PlaceType.VIP, value);
+                    break;
+                case NORMAL:
+                    normalHall = new Hall(10, 15, PlaceType.NORMAL, value);
+                    break;
+                case PREMIUM:
+                    premiumHall = new Hall(5, 15, PlaceType.PREMIUM, value);
+                    break;
             }
         });
     }
