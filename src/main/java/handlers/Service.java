@@ -8,15 +8,12 @@ import mainObjects.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Getter
 @Setter
 public class Service implements Runnable {
-    private Scanner scanner;
-    private int count;
     private List<Movie> multiplexMovieList;
     private List<Movie> zhovtenMovieList;
     private List<Client> clients;
@@ -31,7 +28,7 @@ public class Service implements Runnable {
     private List<Movie> currentMovies;
     private Movie currentMovie;
     private Hall currentHall;
-    List<Place> chosenPlaces;
+    private List<Place> chosenPlaces;
     private int unpaidBookingsCount;
 
     @Override
@@ -45,7 +42,6 @@ public class Service implements Runnable {
         this.dateListMap = dateListMap;
         this.clients = clients;
         this.bookings = bookings;
-        this.scanner = new Scanner(System.in);
     }
 
     private void initDateCinemas(LocalDate date, Client client) {
@@ -71,17 +67,17 @@ public class Service implements Runnable {
     private void registerClient() {
         System.out.println("!!!Registration!!!");
         System.out.println("Please, enter your name:");
-        String name = getStringClientInput();
+        String name = UserInput.getStringClientInput();
         System.out.println("Please, enter your surname:");
-        String surname = getStringClientInput();
+        String surname = UserInput.getStringClientInput();
         System.out.println("Please, enter your age:");
-        int age = getIntClientInput();
+        int age = UserInput.getIntClientInput();
         System.out.println("Please, enter your email:");
-        String email = getStringClientInput();
+        String email = UserInput.getStringClientInput();
         System.out.println("Please, enter your phone:");
-        int phone = getIntClientInput();
+        int phone = UserInput.getIntClientInput();
         System.out.println("Please, enter 1 if you are student or 2 if not:");
-        boolean student = getIntClientInput(1, 2) == 1;
+        boolean student = UserInput.getIntClientInput(1, 2) == 1;
         this.currentClient = new Client(name, surname, age, email, phone, student, null);
         clients.add(currentClient);
         System.out.println("Your client profile:");
@@ -91,10 +87,10 @@ public class Service implements Runnable {
     private void askBookedDate() {
         System.out.println("Starting movie selecting!");
         System.out.println(currentClient.getName() + ", please, enter 1 to choose date or 2 - to view all your bookings or 3 to exit:");
-        int anInt = getIntClientInput(1, 2, 3);
+        int anInt = UserInput.getIntClientInput(1, 2, 3);
         if (anInt == 1) {
             System.out.println(currentClient.getName() + ", please, enter a date when you want go to the cinema (for example: \"" + LocalDate.now() + "\"):");
-            bookedDate = getLocalDateClientInput();
+            bookedDate = UserInput.getLocalDateClientInput();
             initDateCinemas(bookedDate, currentClient);
             selectCinema();
             chooseAction();
@@ -108,7 +104,7 @@ public class Service implements Runnable {
 
     private void selectCinema() {
         System.out.println(currentClient.getName() + ", please, select a cinema: enter 1 to choose Multiplex or 2 to choose Zhovten or 3 to view all your bookings or 4 to exit or 0 to go to choosing date menu:");
-        int anInt = getIntClientInput(0, 1, 2, 3, 4);
+        int anInt = UserInput.getIntClientInput(0, 1, 2, 3, 4);
         if (anInt == 1) {
             System.out.println("You chose cinema Multiplex");
             currentCinema = multiplex;
@@ -134,7 +130,7 @@ public class Service implements Runnable {
                         "3 - to search and choose movie by rating in " + currentCinema.getName() + " cinema for " + bookedDate + "\n" +
                         "4 - to view all your bookings\n" +
                         "0 - to go to choosing date menu:");
-        int anInt = getIntClientInput(0, 1, 2, 3, 4);
+        int anInt = UserInput.getIntClientInput(0, 1, 2, 3, 4);
         if (anInt == 1) {
             printMovieList(currentMovies);
             chooseMovie(currentMovies);
@@ -183,7 +179,7 @@ public class Service implements Runnable {
         boolean confirm = false;
         System.out.println("Time to the end of your ticket booking session: " + currentBooking.getSessionMinutes() + " minutes ");
         System.out.println(currentClient.getName() + ", please, enter 1 - to confirm your ticket booking or 2 - to discard it or 3 to go to choosing date menu:");
-        int anInt = getIntClientInput(1, 2, 3);
+        int anInt = UserInput.getIntClientInput(1, 2, 3);
         if (anInt == 1) {
             currentBooking.setReserved(true);
             bookings.add(currentBooking);
@@ -218,7 +214,7 @@ public class Service implements Runnable {
         System.out.println(currentClient.getName() + ", please, choose one or more places separate them with space (for example: \"1 5 3\")");
         System.out.println("\'O\' means that place is free, \'X\' - place is reserved. You can to choose only free places!");
         currentHall.printHall();
-        chosenPlaces = getChosenPlaces();
+        chosenPlaces = UserInput.getChosenPlaces(currentHall);
         System.out.println("You have chosen next places: ");
         for (Place place : chosenPlaces) {
             place.setReserved(true);
@@ -232,7 +228,7 @@ public class Service implements Runnable {
                 "1 - to choose normal hall or " +
                 "2 - to choose premium hall or " +
                 "3 - to choose VIP hall");
-        int anInt = getIntClientInput(1, 2, 3);
+        int anInt = UserInput.getIntClientInput(1, 2, 3);
         switch (anInt) {
             case 1:
                 currentHall = currentCinema.getNormalHall();
@@ -250,34 +246,6 @@ public class Service implements Runnable {
             e.printStackTrace();
         }
         System.out.println("You chose " + currentHall.getPlaceType() + " hall");
-    }
-
-    private List<Place> getChosenPlaces() {
-        List<Place> allHallPlaces = currentHall.getPlaces();
-        List<Place> chosenPlaces = new ArrayList<>();
-        boolean stop = false;
-        while (!stop) {
-            List<Integer> places = getUserPlacesInput();
-            if (isFreePlaces(places)) {
-                places.forEach(i -> chosenPlaces.add(allHallPlaces.get(i - 1)));
-                stop = true;
-            } else {
-                System.out.println("You enter some reserved place or places, please, try again, choose only free places!");
-            }
-        }
-        return chosenPlaces;
-    }
-
-    private boolean isFreePlaces(List<Integer> list) {
-        List<Place> places = currentHall.getPlaces();
-        boolean free = true;
-        for (Integer i : list) {
-            if (places.get(i - 1).isReserved()) {
-                free = false;
-                break;
-            }
-        }
-        return free;
     }
 
     private void viewBookings() {
@@ -304,7 +272,7 @@ public class Service implements Runnable {
         }
         int[] needed = new int[count];
         for (int i = 0; i < count; i++) needed[i] = i;
-        int anInt = getIntClientInput(needed);
+        int anInt = UserInput.getIntClientInput(needed);
         movies = movieCategoryListMap.get(movieCategories.get(anInt - 1));
         printMovieList(movies);
         chooseMovie(movies);
@@ -320,7 +288,7 @@ public class Service implements Runnable {
 
 
     private void printMovieList(List<Movie> movieList) {
-        this.count = 0;
+        int count = 0;
         System.out.println("________________________________________________________________"
                 + "______________________________________________________________________"
                 + "_______________________________");
@@ -338,7 +306,7 @@ public class Service implements Runnable {
                 + "_________|______________|______________|_____________|________________"
                 + "________|____________|________|");
         for (Movie movie : movieList) {
-            String number = new Formatter().format("| %-2d ", ++this.count).toString();
+            String number = new Formatter().format("| %-2d ", ++count).toString();
             System.out.println(number + movie);
         }
         System.out.println("|____|_____________________________________|________________|___"
@@ -350,14 +318,14 @@ public class Service implements Runnable {
         System.out.println("Please, enter number of movie you want to reserved  from the list above or 0 to go to preview menu:");
         int[] needed = new int[movieList.size() + 1];
         for (int i = 0; i < movieList.size() + 1; i++) needed[i] = i;
-        int anInt = getIntClientInput(needed);
+        int anInt = UserInput.getIntClientInput(needed);
         if (anInt == 0) {
             selectCinema();
         } else {
             Movie chosenMovie = movieList.get(anInt - 1);
             System.out.println("You chose movie number " + anInt + " " + chosenMovie.getName());
             System.out.println("If you want to bay ticket or tickets for this movie enter 1 or 2 if you want to choose another movie");
-            anInt = getIntClientInput(1, 2);
+            anInt = UserInput.getIntClientInput(1, 2);
             if (anInt == 1) {
                 currentMovie = chosenMovie;
                 if (isTwoUnpaidBookingsPresent()) {
@@ -373,105 +341,7 @@ public class Service implements Runnable {
         }
     }
 
-    private List<Integer> getUserPlacesInput() {
-        final List<Integer> intPlaces = new ArrayList<>();
-        List<String> places;
-        boolean stop = false;
-        while (!stop) {
-            String place = getStringClientInput();
-            places = new ArrayList<>(Arrays.asList(place.trim().split(" ")));
-            try {
-                places.forEach(s -> intPlaces.add(Integer.parseInt(s.trim())));
-            } catch (NumberFormatException ex) {
-                System.out.println("You enter incorrect data! Please try again!");
-                continue;
-            }
-            stop = true;
-            int n = currentHall.getPlaces().size();
-            for (Integer i : intPlaces) {
-                if (i < 1 || i > n) {
-                    System.out.println("You enter incorrect data! Please try again!");
-                    stop = false;
-                    break;
-                }
-            }
-        }
-        return intPlaces;
-    }
 
-    private String getStringClientInput() {
-        String string = "";
-        boolean stop = false;
-        while (!stop) {
-            try {
-                string = scanner.nextLine().trim();
-            } catch (IllegalStateException | NoSuchElementException ex) {
-                System.out.println("You enter incorrect data! Please try again!");
-                continue;
-            }
-            stop = true;
-        }
-        return string;
-    }
 
-    private LocalDate getLocalDateClientInput() {
-        LocalDate localDate = LocalDate.now();
-        boolean stop = false;
-        while (!stop) {
-            try {
-                localDate = LocalDate.parse(getStringClientInput());
-            } catch (IllegalStateException | NoSuchElementException | DateTimeParseException ex) {
-                System.out.println("You enter incorrect data! Please try again!");
-                continue;
-            }
-            if (localDate.isBefore(LocalDate.now())) {
-                System.out.println("You enter incorrect data, your date is before now! Please try again!");
-                continue;
-            }
-            stop = true;
-        }
-        return localDate;
-    }
 
-    private int getIntClientInput(int... needed) {
-        int anInt = 0;
-        boolean stop = false;
-        while (!stop) {
-            try {
-                anInt = Integer.parseInt(scanner.nextLine());
-            } catch (IllegalStateException | NoSuchElementException | NumberFormatException ex) {
-                System.out.println("You enter incorrect data! Please try again!");
-                scanner.nextLine();
-                continue;
-            }
-            boolean good = true;
-            for (int i : needed) {
-                if (i == anInt) {
-                    good = false;
-                    break;
-                }
-            }
-            if (!good) {
-                stop = true;
-            } else {
-                System.out.println("You enter incorrect data! Please try again!!!!!!!!");
-            }
-        }
-        return anInt;
-    }
-
-    private int getIntClientInput() {
-        int anInt = 0;
-        boolean stop = false;
-        while (!stop) {
-            try {
-                anInt = Integer.parseInt(scanner.nextLine());
-            } catch (IllegalStateException | NoSuchElementException | NumberFormatException ex) {
-                System.out.println("You enter incorrect data! Please try again!");
-                continue;
-            }
-            stop = true;
-        }
-        return anInt;
-    }
 }
