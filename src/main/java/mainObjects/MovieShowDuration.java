@@ -13,14 +13,6 @@ public class MovieShowDuration {
     private LocalTime from;
     private LocalTime to;
 
-//    public String getDuration() {
-//        return Duration.between(from, to)
-//                .toString()
-//                .substring(2)
-//                .replaceAll("(\\d[HMS])(?!$)", "$1 ")
-//                .toLowerCase();
-//    }
-
     @Override
     public String toString() {
         return "from " + getFrom() + " to " + getTo();

@@ -90,18 +90,21 @@ class ListGenerator {
         PlaceType placeType = movie.getPlaceType();
         switch (placeType) {
             case NORMAL:
-                price = NORMAL_PRICE * discount;
-                movie.setPriceExplanation("PRICE FOR MOVIE: " + price + "grn." + ", original price - " + NORMAL_PRICE + "grn., " + movie.getPriceExplanation());
+                price = getPriceAndSetPriceExplanation(movie, NORMAL_PRICE, discount);
                 break;
             case PREMIUM:
-                price = PREMIUM_PRICE * discount;
-                movie.setPriceExplanation("PRICE FOR MOVIE: " + price + "grn." + ", original price - " + PREMIUM_PRICE + "grn., " + movie.getPriceExplanation());
+                price = getPriceAndSetPriceExplanation(movie, PREMIUM_PRICE, discount);
                 break;
             case VIP:
-                price = VIP_PRICE * discount;
-                movie.setPriceExplanation("PRICE FOR MOVIE: " + price + "grn." + ", original price - " + VIP_PRICE + "grn., " + movie.getPriceExplanation());
+                price = getPriceAndSetPriceExplanation(movie, VIP_PRICE, discount);
                 break;
         }
+        return price;
+    }
+
+    private static double getPriceAndSetPriceExplanation(Movie movie, double specialPrice, double discount) {
+        double price = specialPrice * discount;
+        movie.setPriceExplanation("PRICE FOR MOVIE: " + price + "grn." + ", original price - " + specialPrice + "grn., " + movie.getPriceExplanation());
         return price;
     }
 }

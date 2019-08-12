@@ -1,9 +1,10 @@
-package mainObjects;
+package handlers;
 
-import handlers.Service;
 import enums.PaymentStatus;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import mainObjects.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ import java.util.TimerTask;
 
 @Setter
 @Getter
+@Builder
 public class Booking {
     private LocalDate bookedDate;
     private PaymentStatus paymentStatus;
@@ -23,40 +25,20 @@ public class Booking {
     private Client client;
     private Hall hall;
     private boolean reserved;
+    private Service service;
+
     private LocalDateTime bookingEnd;
     private String paymentDeadlineString;
-    private int sessionMinutes = 15;
-    private Service service;
+    private int sessionMinutes;
     private boolean confirm;
 
-
-    public Booking(LocalDate bookedDate,
-                   PaymentStatus paymentStatus,
-                   Movie bookedMovie,
-                   List<Place> places,
-                   Cinema cinema,
-                   Client client,
-                   Hall hall,
-                   boolean reserved,
-                   Service service) {
-        this.bookedDate = bookedDate;
-        this.paymentStatus = paymentStatus;
-        this.bookedMovie = bookedMovie;
-        this.places = places;
-        this.cinema = cinema;
-        this.client = client;
-        this.hall = hall;
-        this.reserved = reserved;
-        this.service = service;
-        startTimer();
-    }
-
-    private void startTimer() {
+    void startTimer() {
         final Timer timer = new Timer();
         sessionMinutes = 15;
         timer.scheduleAtFixedRate(new TimerTask() {
             public void run() {
                 --sessionMinutes;
+                System.out.println("You have " + sessionMinutes + "minutes to the end of session!");
                 if (sessionMinutes < 0 && !reserved) {
                     service.discardCurrentBooking();
                     System.out.println("Your booking for movie " + bookedMovie + " for the date " + bookedDate + " is discarded, because session time has elapsed");

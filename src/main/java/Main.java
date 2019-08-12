@@ -1,5 +1,5 @@
 import handlers.Service;
-import mainObjects.Booking;
+import handlers.Booking;
 import mainObjects.Cinema;
 import mainObjects.Client;
 

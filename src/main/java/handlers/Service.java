@@ -163,7 +163,12 @@ public class Service implements Runnable {
     private void booking() {
         System.out.println(currentClient.getName() + ", you started an order for booking tickets for movie " + currentMovie.getName() + " for date " + bookedDate);
         System.out.println("You have 15 minutes to complete this order!");
-        currentBooking = new Booking(bookedDate, PaymentStatus.UNPAID, currentMovie, null, currentCinema, currentClient, null, false, this);
+
+        currentBooking = new Booking.BookingBuilder().bookedDate(bookedDate).paymentStatus(PaymentStatus.UNPAID)
+                .bookedMovie(currentMovie).places(null).cinema(currentCinema).client(currentClient)
+                .hall(null).reserved(false).service(this).build();
+
+        currentBooking.startTimer();
         chooseHall();
         choosePlaces();
         currentBooking.setPlaces(chosenPlaces);
@@ -204,7 +209,7 @@ public class Service implements Runnable {
         }
     }
 
-    public void discardCurrentBooking() {
+    void discardCurrentBooking() {
         chosenPlaces.forEach(place -> currentHall.getPlaces().get(place.getNumber()).setReserved(false));
         bookings.remove(currentBooking);
     }

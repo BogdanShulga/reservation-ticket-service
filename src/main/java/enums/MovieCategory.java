@@ -6,10 +6,5 @@ public enum MovieCategory {
     HORROR,
     THRILLER,
     COMEDY,
-//    ROMANCE,
-//    SCI_FI,
-//    MYSTERY,
-    FAMILY;
-//    WESTERN,
-//    DOCUMENTARIES;
+    FAMILY
 }

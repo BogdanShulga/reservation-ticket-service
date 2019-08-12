@@ -1,6 +1,8 @@
 package mainObjects;
 
+import handlers.Booking;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class Client {
     private String name;
     private String surName;
